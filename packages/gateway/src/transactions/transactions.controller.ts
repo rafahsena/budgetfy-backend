@@ -3,38 +3,40 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
+  Param,
+  ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { catchError, firstValueFrom } from 'rxjs';
-import { ClientProxy } from '@nestjs/microservices';
+import { TransactionsTcpService } from './transactions.service';
 
 @Controller('transactions')
 export class TransactionsController {
-  constructor(
-    @Inject('TRANSACTION_SERVICE')
-    private readonly transactionServiceClient: ClientProxy,
-  ) {}
+  constructor(private readonly transactionsService: TransactionsTcpService) {}
 
   @Post()
   createNewTransaction(@Body() transactionData) {
     try {
-      const transaction = this.transactionServiceClient
-        .send('createTransaction', transactionData)
-        .pipe(
-          catchError((error) => {
-            throw new BadRequestException(error);
-          }),
-        );
-      return transaction;
-    } catch (e) {}
+      return this.transactionsService.createTransaction(transactionData);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
   @Get()
-  async getAllTransactions() {
-    const transactions = await firstValueFrom(
-      this.transactionServiceClient.send('findAllTransaction', {}),
-    );
-    return transactions;
+  getAllTransactions() {
+    try {
+      return this.transactionsService.getAllTransactions();
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
+  @Get('account/:accountId')
+  getAccountTransactions(@Param('accountId', ParseIntPipe) accountId: number) {
+    try {
+      return this.transactionsService.getAccountTransactions(accountId);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 }
