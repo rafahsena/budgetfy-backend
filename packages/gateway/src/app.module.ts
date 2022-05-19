@@ -1,31 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ClientProxyFactory } from '@nestjs/microservices';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AccountsController } from './accounts/accounts.controller';
-import { TransactionsController } from './transactions/transactions.controller';
+import { ConfigModule } from '@nestjs/config';
+import { AccountsModule } from './accounts/accounts.module';
 import config from './services/config';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, load: [config] })],
-  controllers: [AccountsController, TransactionsController],
-  providers: [
-    {
-      provide: 'ACCOUNT_SERVICE',
-      useFactory: (configService: ConfigService) => {
-        const accountServiceConfig = configService.get('accountService');
-        return ClientProxyFactory.create(accountServiceConfig);
-      },
-      inject: [ConfigService],
-    },
-    {
-      provide: 'TRANSACTION_SERVICE',
-      useFactory: (configService: ConfigService) => {
-        const transactionServiceConfig =
-          configService.get('transactionService');
-        return ClientProxyFactory.create(transactionServiceConfig);
-      },
-      inject: [ConfigService],
-    },
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    TransactionsModule,
+    AccountsModule,
   ],
 })
 export class AppModule {}

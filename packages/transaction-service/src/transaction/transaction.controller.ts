@@ -19,6 +19,11 @@ export class TransactionController {
     return this.transactionService.findAll();
   }
 
+  @MessagePattern('getAccountTransactions')
+  getAccountTransactions(@Payload() accountId: number) {
+    return this.transactionService.getAccountTransactions(accountId);
+  }
+
   @MessagePattern('findOneTransaction')
   findOne(@Payload() id: number) {
     return this.transactionService.findOne(id);

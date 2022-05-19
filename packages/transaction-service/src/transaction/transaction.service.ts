@@ -31,4 +31,8 @@ export class TransactionService {
   remove(id: number) {
     return this.prisma.transaction.delete({ where: { id } });
   }
+
+  getAccountTransactions(accountId: number) {
+    return this.prisma.transaction.findMany({ where: { accountId } });
+  }
 }
