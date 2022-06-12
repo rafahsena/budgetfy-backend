@@ -7,13 +7,14 @@ export default () => ({
       host: process.env.ACCOUNT_SERVICE_HOST,
       port: process.env.ACCOUNT_SERVICE_PORT,
     },
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
   },
   transactionService: {
     options: {
-      host: process.env.TRANSACTION_SERVICE_HOST,
-      port: process.env.TRANSACTION_SERVICE_PORT,
+      urls: [process.env.TRANSACTION_SERVICE_RABBITMQ],
+      queue: process.env.TRANSACTION_SERVICE_QUEUE_NAME,
+      queueOptions: { durable: true },
     },
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
   },
 });
