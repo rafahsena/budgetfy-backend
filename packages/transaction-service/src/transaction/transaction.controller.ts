@@ -1,5 +1,5 @@
-import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { Controller, UsePipes } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';

@@ -1,10 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { RpcException } from '@nestjs/microservices';
+import { RpcException, MicroserviceOptions } from '@nestjs/microservices';
 import { TransactionModule } from './transaction/transaction.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(TransactionModule);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    TransactionModule,
+    { options: { port: process.env.TRANSACTION_SERVICE_PORT } },
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

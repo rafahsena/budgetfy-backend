@@ -5,12 +5,14 @@ export default () => ({
   accountService: {
     options: {
       host: process.env.ACCOUNT_SERVICE_HOST,
+      port: process.env.ACCOUNT_SERVICE_PORT,
     },
     transport: Transport.TCP,
   },
   transactionService: {
     options: {
       host: process.env.TRANSACTION_SERVICE_HOST,
+      port: process.env.TRANSACTION_SERVICE_PORT,
     },
     transport: Transport.TCP,
   },
